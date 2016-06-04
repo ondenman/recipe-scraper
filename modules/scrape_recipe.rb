@@ -1,4 +1,4 @@
-require './library/functions.rb'
+require './scrape.rb'
 
 module ScrapeRecipe
 
@@ -80,7 +80,7 @@ module ScrapeRecipe
   end
 
   def recipe(url)
-    @@page = get_page(url)
+    @@page = Scrape::get_page(url)
     recipe = {}
     add_to_object(recipe, 'title', title)
     add_to_object(recipe, 'meta_data', meta_data)

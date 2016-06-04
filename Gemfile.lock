@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    json (1.8.3)
     mini_portile2 (2.0.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
@@ -13,6 +14,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  json
   nokogiri
   open_uri_redirections
   without_accents (~> 0.9.1)

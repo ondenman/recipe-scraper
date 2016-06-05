@@ -2,7 +2,7 @@
 
 I set myself the task of writing a scraper.
 
-I chose to scrape [BBC Food](http://www.bbc.co.uk/food/). The site has been in the [news](http://www.bbc.co.uk/news/uk-36308976) recently and I thought it would make a good place to practice as the BBC has a well structured site.
+I chose to scrape recipes [BBC Food](http://www.bbc.co.uk/food/). The site has been in the [news](http://www.bbc.co.uk/news/uk-36308976) recently and I thought it would make a good place to practice as the BBC has a well structured site.
 
 The idea was to scrape a list of URLs before scraping the recipes from each URL in turn and storing them in a JSON file.
 

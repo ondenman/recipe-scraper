@@ -1,14 +1,16 @@
-require './scrape.rb'
+#!/usr/bin/env ruby
+
+# require './scrape.rb'
 
 module ScrapeRecipe
 
-  def title
-    title = @@page.css('.content-title__text').text
+  def self.recipe_title(page)
+    title = page.css('.content-title__text').text
   end
 
-  def meta_data
+  def self.meta_data(page)
     meta_data = {}
-    @@page.css('.recipe-metadata-wrap p')
+    page.css('.recipe-metadata-wrap p')
       .each_slice(2) do |i|
         key = i[0].text.strip
         value = i[1].text.strip
@@ -17,19 +19,19 @@ module ScrapeRecipe
     meta_data
   end
 
-  def description
-    @@page.css('.recipe-description__text').text.strip
+  def self.description(page)
+    page.css('.recipe-description__text').text.strip
   end
 
-  def chef_name
-    @@page.css('.chef__name').text.strip
+  def self.chef_name(page)
+    page.css('.chef__name').text.strip
   end
 
-  def programme_name
-    @@page.css('.chef__programme-name').text.strip
+  def self.programme_name(page)
+    page.css('.chef__programme-name').text.strip
   end
 
-  def combine_ingredients_and_sub_headings(ingredients, sub_headings)
+  def self.combine_ingredients_and_sub_headings(ingredients, sub_headings)
     ingredients_and_sub_headings = {}
     step = case
       when sub_headings.length < ingredients.length
@@ -47,10 +49,10 @@ module ScrapeRecipe
   end
 
 
-  def ingredients
-    ingredients = @@page.css('.recipe-ingredients__list')
+  def self.ingredients(page)
+    ingredients = page.css('.recipe-ingredients__list')
     ingredient_list = Array.new
-    @@page.css('.recipe-ingredients__list').each do |i|
+    page.css('.recipe-ingredients__list').each do |i|
       arr = i.text.strip.split(/\n+/)
       arr.each do |i|
         i.strip!
@@ -58,12 +60,12 @@ module ScrapeRecipe
       ingredient_list.push arr.reject { |i| i.length == 0}
     end
 
-    ingredients_sub_headings = @@page.css('.recipe-ingredients__sub-heading')
+    ingredients_sub_headings = page.css('.recipe-ingredients__sub-heading')
     combine_ingredients_and_sub_headings(ingredient_list, ingredients_sub_headings)
   end
 
-  def method
-    method_steps = @@page.css('.recipe-method__list p')
+  def self.method(page)
+    method_steps = page.css('.recipe-method__list p')
     method = []
     method_steps.each do |step|
       method.push(step.text.strip)
@@ -71,25 +73,23 @@ module ScrapeRecipe
     method
   end
 
-  def tips
-    tips = @@page.css('.recipe-tips__text').text.strip.gsub(/\s+/, ' ')
+  def self.tips(page)
+    tips = page.css('.recipe-tips__text').text.strip.gsub(/\s+/, ' ')
   end
 
-  def add_to_object(obj, key, value)
-    obj[key] = value 
+  def self.add_to_object(obj, key, value)
+    obj[key] = value unless value.length == 0
   end
 
-  def recipe(url)
-    @@page = Scrape::get_page(url)
+  def self.recipe(page)
     recipe = {}
-    add_to_object(recipe, 'title', title)
-    add_to_object(recipe, 'meta_data', meta_data)
-    add_to_object(recipe, 'chef_name', chef_name)
-    add_to_object(recipe, 'programme_name', programme_name)
-    add_to_object(recipe, 'description', description)
-    add_to_object(recipe, 'ingredients', ingredients)
-    add_to_object(recipe, 'method', method)
-    add_to_object(recipe, 'tips', tips)
+    add_to_object(recipe, 'meta_data', meta_data(page))
+    add_to_object(recipe, 'chef_name', chef_name(page))
+    add_to_object(recipe, 'programme_name', programme_name(page))
+    add_to_object(recipe, 'description', description(page))
+    add_to_object(recipe, 'ingredients', ingredients(page))
+    add_to_object(recipe, 'method', method(page))
+    add_to_object(recipe, 'tips', tips(page))
 
     recipe
   end
